@@ -1,0 +1,6 @@
+@Api.Services.UserManagement_HostAddress = http://localhost:2000/
+
+GET {{Api.Services.UserManagement_HostAddress}}/application/v1/GetAllApplications/
+Accept: application/json
+
+###
