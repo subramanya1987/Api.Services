@@ -8,9 +8,13 @@ public class APIHttpException : APIException
     
     public string ThirdpartyErrorCode { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public APIHttpException(string? message = null, Exception? innerException = null) : base(message ?? string.Empty, innerException) { }
-    
-    public APIHttpException(string message, HttpStatusCode statusCode, Exception? innerException = null): base(message ?? string.Empty, innerException) 
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    public APIHttpException(string message, HttpStatusCode statusCode, Exception? innerException = null): base(message ?? string.Empty, innerException)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         StatusCode = statusCode;
     }

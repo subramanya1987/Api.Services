@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Api.Services.Infra.Cache;
+using Api.Services.UserManagement.Consumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,12 +35,19 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.ToString());
 });
 
+builder.Services.AddSingleton<Api.Services.Infra.Events.IEventProducer, Api.Services.Infra.Events.APIEventProducer>();
+
 builder.Services.AddDbContext<Api.Services.DataAccess.Entities.UserManagement.UserManagementContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("UserManagementDB") ?? 
             throw new InvalidOperationException("Connection string 'UserManagementDB' not found.")));
 builder.Services.AddSingleton<ICacheProvider, RedisCacheProvider>();
 builder.Services.AddTransient<IApplicationManager, ApplicationManager>();
 builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddTransient<IUserManager, UserManager>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddHostedService<UserListener>();
+builder.Services.AddHttpClient();
+
 
 var app = builder.Build();
 
