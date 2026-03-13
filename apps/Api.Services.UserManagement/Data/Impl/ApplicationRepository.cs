@@ -1,6 +1,7 @@
 ﻿using Api.Services.DataAccess.Entities.UserManagement;
 using Api.Services.Infra.Cache;
 using Api.Services.Models.UserManagement;
+using Api.Services.UserManagement.Helper;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -22,7 +23,7 @@ namespace Api.Services.UserManagement.Data.Impl
             var responseObject = new List<ApplicationResponse>();
 
             //Define cache name
-            string cacheName = "GetAllApplications";
+            string cacheName = CacheHelper.GetCacheName();
 
             var cacheData= await _redisCache.GetAsync<List<ApplicationResponse>>(cacheName);
 
@@ -39,7 +40,7 @@ namespace Api.Services.UserManagement.Data.Impl
                 responseObject=JsonConvert.DeserializeObject<List<ApplicationResponse>>(JsonConvert.SerializeObject(dbResponse));               
             }
             //Set cache
-            await _redisCache.SetAsync(cacheName, responseObject, TimeSpan.FromMinutes(int.Parse(_config["REDIS_CACHE_MINUTES"]??"600")));
+            await _redisCache.SetAsync(cacheName,responseObject, TimeSpan.FromMinutes(int.Parse(_config["REDIS_CACHE_MINUTES"]??"600")));
 
 #pragma warning disable CS8603 // Possible null reference return.
             return responseObject;
